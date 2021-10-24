@@ -1,11 +1,17 @@
+/* * {
+  overflow-x: hidden;
+} */
+
 .card {
   width: 250px;
-  height: 250px;
+  height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
-
+p.card {
+  color: #000;
+}
 label {
   width: max-content;
   color: tomato;
@@ -68,6 +74,12 @@ textarea {
   color: white;
   background-color: tomato;
   cursor: pointer;
+  margin-top: 5px;
+}
+
+.submitButton:active {
+  border: solid 1px tomato;
+  background-color: #808080;
 }
 
 .buttons,
@@ -86,19 +98,19 @@ textarea {
   cursor: pointer;
 }
 
-.button:focus{
+.button:focus {
   outline: none;
 }
 
-.logout{
+.logout {
   background-color: tomato;
 }
 
-.login{
+.login {
   background-color: teal;
   margin-right: 10px;
 }
 
-.register{
+.register {
   background-color: slateblue;
 }

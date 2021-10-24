@@ -68,4 +68,15 @@ else{
   }
 });
 
+router.post("/logout", async (req, res) => {
+try {
+  req.logout();
+  res.status(200).json("You are logged out");
+}
+
+  catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

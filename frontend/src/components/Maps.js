@@ -1,7 +1,7 @@
 import "../app.css"
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
-import { HomeOutlined, PinDropSharp, Room, Star, StarBorder } from "@material-ui/icons";
+import { HomeOutlined, PinDropSharp, Room, Star, StarBorder, MyLocation } from "@material-ui/icons";
 import axios from "axios";
 import { format } from "timeago.js";
 import Register from "./Register";
@@ -25,7 +25,11 @@ function Maps(props) {
   const [viewport, setViewport] = useState({
     latitude: 47.040182,
     longitude: 17.071727,
-    zoom: 4,
+    zoom: 15,
+  });
+  const [liveviewport, setLiveviewport] = useState({
+    latitude:47.040182,
+    longitude: 17.071727,
   });
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -89,7 +93,6 @@ function Maps(props) {
   const handleSeeAllVol = async (e)=>{
     e.preventDefault();
     console.log("clicked the see all volunteers button")
-    // return <Redirect to="/seeallvolunteers" />
     props.history.push("/seeallvolunteers");
   }
 
@@ -129,10 +132,30 @@ function Maps(props) {
     getPins();
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const userDetails = {
+      username: myStorage.getItem("user")
+    };
+    await axios.post("http://localhost:4000/api/users/logout");
     setCurrentUsername(null);
     myStorage.removeItem("user");
   };
+
+// var liveLat = 
+if('geolocation' in navigator){
+  console.log("geolocation is available");
+  navigator.geolocation.getCurrentPosition(position=>{
+    console.log("Longitude is ",position.coords.longitude);
+    console.log("Latitude is ",position.coords.latitude);
+    setLiveviewport({...liveviewport, latitude: position.coords.latitude, longitude: position.coords.longitude });
+    setViewport({ ...viewport, latitude: position.coords.latitude, longitude: position.coords.longitude });
+  });
+}
+else{
+  console.log("geolocation is unavailable");
+}
+
+
 
   return (
 <div style={{ height: "100vh", width: "100%" }}>
@@ -146,6 +169,49 @@ function Maps(props) {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={currentUsername && handleAddClick}
       >
+        <Marker
+              latitude={liveviewport.latitude}
+              longitude={liveviewport.longitude}
+              offsetLeft={-3.5 * viewport.zoom}
+              offsetTop={-7 * viewport.zoom}
+            >
+              <MyLocation
+                style={{
+                  fontSize: 3 * viewport.zoom,
+                  color:"red",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleMarkerClick("Live Geolocation", liveviewport.latitude, liveviewport.longitude)}
+              />
+            </Marker>
+
+
+
+      {currentPlaceId == "Live Geolocation" && (
+      <Popup
+              key={currentPlaceId}
+              latitude={liveviewport.latitude}
+              longitude={liveviewport.longitude}
+              closeButton={true}
+              closeOnClick={false}
+              onClose={() => setCurrentPlaceId(null)}
+              anchor="left"
+            >
+              <div style={
+                {
+                  maxHeight:"70px",
+                  backgroundColor:"black",
+                  color:"white",
+                  paddingLeft:"5px",
+                  paddingTop:"5px"
+                }
+                }>
+                Your Location
+              </div>
+            </Popup>)}
+
+
+
         {pins.map((p) => (
           <>
             <Marker
@@ -156,7 +222,7 @@ function Maps(props) {
             >
               <Room
                 style={{
-                  fontSize: 7 * viewport.zoom,
+                  fontSize: 3 * viewport.zoom,
                   color:
                     currentUsername === p.username ? "tomato" : "slateblue",
                   cursor: "pointer",
@@ -224,7 +290,7 @@ function Maps(props) {
             >
               <Room
                 style={{
-                  fontSize: 7 * viewport.zoom,
+                  fontSize: 3 * viewport.zoom,
                   color: "tomato",
                   cursor: "pointer",
                 }}

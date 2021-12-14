@@ -2,6 +2,7 @@
 # Waste Tracker
 
 Created a web platform to enable volunteers to efficiently find and clear wastes generated near them using React and MapBox Api. Users can add location of such waste sites near them on the map. Volunteers can then see waste sites and then click to volunteer, see available volunteers to clear such areas.
+
 We made this project in hackathon called Hack the Fall 2.0. It was 2 days hackathon, so we added whatever we could in that two days.
 
 

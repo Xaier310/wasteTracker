@@ -1,3 +1,15 @@
-#footer{
-    height: 40px;
+footer {
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+#footer {
+  position: absolute;
+  color: white;
+  background-color: "DodgerBlue";
+  padding: 10px 10rem;
+  margin: 0 auto 0;
+  bottom: 0;
 }

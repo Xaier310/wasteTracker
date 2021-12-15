@@ -4,7 +4,7 @@ require("dotenv").config();
 const app = express();
 const pinRoute = require("./routes/pins");
 const userRoute = require("./routes/users");
-const volRoute = require(__dirname + "/routes/volunteer");
+const volRoute = require("./routes/volunteer");
 const userSchema = require("./models/User");
 const session = require("express-session");
 const passport = require("passport");

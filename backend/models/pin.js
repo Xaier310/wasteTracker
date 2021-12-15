@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {Volunteer} =require("../models/Volunteer")
+const { Volunteer } = require("../models/Volunteer");
 const PinSchema = new mongoose.Schema(
   {
     username: {

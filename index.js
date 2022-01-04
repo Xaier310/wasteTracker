@@ -30,8 +30,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 mongoose.connect(
-  // `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@seniorcircle.z5ejt.mongodb.net/WasteTracker`,
-  `mongodb://localhost:27017/WasteTracker`,
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@seniorcircle.z5ejt.mongodb.net/WasteTracker`,
+  // `mongodb://localhost:27017/WasteTracker`,
   (err) => {
     if (err) throw err;
     console.log("DB Connected Successfully");

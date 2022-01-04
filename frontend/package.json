@@ -18,7 +18,8 @@
     "react-scripts": "4.0.3",
     "three": "^0.127.0",
     "timeago.js": "^4.0.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,7 +37,8 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "defaults, not ie 11"
     ],
     "development": [
       "last 1 chrome version",

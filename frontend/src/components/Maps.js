@@ -1,15 +1,24 @@
-import "../app.css"
+import "../app.css";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
-import { HomeOutlined, PinDropSharp, Room, Star, StarBorder, MyLocation } from "@material-ui/icons";
+import {
+  HomeOutlined,
+  PinDropSharp,
+  Room,
+  Star,
+  StarBorder,
+  MyLocation,
+} from "@material-ui/icons";
 import axios from "axios";
 import { format } from "timeago.js";
 import Register from "./Register";
 import Login from "./Login";
-import { Redirect } from "react-router-dom"
-
-
-
+import { Redirect } from "react-router-dom";
+import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl";
+//@ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
+mapboxgl.workerClass =require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 function Maps(props) {
   const myStorage = window.localStorage;
 
@@ -28,7 +37,7 @@ function Maps(props) {
     zoom: 15,
   });
   const [liveviewport, setLiveviewport] = useState({
-    latitude:47.040182,
+    latitude: 47.040182,
     longitude: 17.071727,
   });
   const [showRegister, setShowRegister] = useState(false);
@@ -36,28 +45,27 @@ function Maps(props) {
 
   const handleMarkerClick = async (id, lat, long) => {
     setCurrentPlaceId(id);
-      console.log("handle clicked");
+    console.log("handle clicked");
     let res = await axios.get("http://localhost:4000/api/volunteer");
     let allVolunteers = res.data;
 
     let volunteerOrNot = false;
-    console.log("pinId : ",id);
-    console.log("currentUsername : ",currentUsername);
-    for(let i=0;allVolunteers&&i<allVolunteers.length;i++)
-    { 
-       if(allVolunteers[i].username===currentUsername&&allVolunteers[i].pinId===id)
-       {
-         volunteerOrNot = true;
-         break;
-       }
-    } 
+    console.log("pinId : ", id);
+    console.log("currentUsername : ", currentUsername);
+    for (let i = 0; allVolunteers && i < allVolunteers.length; i++) {
+      if (
+        allVolunteers[i].username === currentUsername &&
+        allVolunteers[i].pinId === id
+      ) {
+        volunteerOrNot = true;
+        break;
+      }
+    }
 
-    console.log("volunteerOrNot : ",volunteerOrNot);
+    console.log("volunteerOrNot : ", volunteerOrNot);
 
-    if(volunteerOrNot)
-        setvolunteerButton("Cancel volunteer");
-    else 
-        setvolunteerButton("Be a volunteer");
+    if (volunteerOrNot) setvolunteerButton("Cancel volunteer");
+    else setvolunteerButton("Be a volunteer");
 
     setViewport({ ...viewport, latitude: lat, longitude: long });
   };
@@ -90,12 +98,11 @@ function Maps(props) {
     }
   };
 
-  const handleSeeAllVol = async (e)=>{
+  const handleSeeAllVol = async (e) => {
     e.preventDefault();
-    console.log("clicked the see all volunteers button")
+    console.log("clicked the see all volunteers button");
     props.history.push("/seeallvolunteers");
-  }
-
+  };
 
   const [volunteerButton, setvolunteerButton] = useState("Be a volunteer");
   const handleVolSubmit = async (e) => {
@@ -103,19 +110,20 @@ function Maps(props) {
     console.log(e);
     const newVol = {
       pin_id: currentPlaceId,
-      username: myStorage.getItem("user")
+      username: myStorage.getItem("user"),
     };
 
     try {
-      const res = await axios.post("http://localhost:4000/api/volunteer", newVol);
-    console.log(res.data);
-    if(res.data==='Volunteer added successfully'){
-      setvolunteerButton("Cancel volunteer");
-    }
-    else if(res.data==='You are not volunteer now'){
-      setvolunteerButton("Be a volunteer");
-    }
-    
+      const res = await axios.post(
+        "http://localhost:4000/api/volunteer",
+        newVol
+      );
+      console.log(res.data);
+      if (res.data === "Volunteer added successfully") {
+        setvolunteerButton("Cancel volunteer");
+      } else if (res.data === "You are not volunteer now") {
+        setvolunteerButton("Be a volunteer");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -134,31 +142,36 @@ function Maps(props) {
 
   const handleLogout = async () => {
     const userDetails = {
-      username: myStorage.getItem("user")
+      username: myStorage.getItem("user"),
     };
     await axios.post("http://localhost:4000/api/users/logout");
     setCurrentUsername(null);
     myStorage.removeItem("user");
   };
 
-// var liveLat = 
-if('geolocation' in navigator){
-  console.log("geolocation is available");
-  navigator.geolocation.getCurrentPosition(position=>{
-    console.log("Longitude is ",position.coords.longitude);
-    console.log("Latitude is ",position.coords.latitude);
-    setLiveviewport({...liveviewport, latitude: position.coords.latitude, longitude: position.coords.longitude });
-    setViewport({ ...viewport, latitude: position.coords.latitude, longitude: position.coords.longitude });
-  });
-}
-else{
-  console.log("geolocation is unavailable");
-}
-
-
+  // var liveLat =
+  if ("geolocation" in navigator) {
+    console.log("geolocation is available");
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log("Longitude is ", position.coords.longitude);
+      console.log("Latitude is ", position.coords.latitude);
+      setLiveviewport({
+        ...liveviewport,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+      setViewport({
+        ...viewport,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
+  } else {
+    console.log("geolocation is unavailable");
+  }
 
   return (
-<div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100vh", width: "100%" }}>
       <ReactMapGL
         {...viewport}
         mapboxApiAccessToken="pk.eyJ1IjoiYW1pdGJhdHJhMzEiLCJhIjoiY2t2MmQzbnh0MDI5dzJ5bDdvbDExand4MiJ9.vJaVz5di-IFq3uJd_eCC2Q"
@@ -170,47 +183,50 @@ else{
         onDblClick={currentUsername && handleAddClick}
       >
         <Marker
-              latitude={liveviewport.latitude}
-              longitude={liveviewport.longitude}
-              offsetLeft={-3.5 * viewport.zoom}
-              offsetTop={-7 * viewport.zoom}
+          latitude={liveviewport.latitude}
+          longitude={liveviewport.longitude}
+          offsetLeft={-3.5 * viewport.zoom}
+          offsetTop={-7 * viewport.zoom}
+        >
+          <MyLocation
+            style={{
+              fontSize: 3 * viewport.zoom,
+              color: "red",
+              cursor: "pointer",
+            }}
+            onClick={() =>
+              handleMarkerClick(
+                "Live Geolocation",
+                liveviewport.latitude,
+                liveviewport.longitude
+              )
+            }
+          />
+        </Marker>
+
+        {currentPlaceId == "Live Geolocation" && (
+          <Popup
+            key={currentPlaceId}
+            latitude={liveviewport.latitude}
+            longitude={liveviewport.longitude}
+            closeButton={true}
+            closeOnClick={false}
+            onClose={() => setCurrentPlaceId(null)}
+            anchor="left"
+          >
+            <div
+              style={{
+                maxHeight: "70px",
+                backgroundColor: "black",
+                color: "white",
+                paddingLeft: "5px",
+                paddingTop: "5px",
+              }}
             >
-              <MyLocation
-                style={{
-                  fontSize: 3 * viewport.zoom,
-                  color:"red",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleMarkerClick("Live Geolocation", liveviewport.latitude, liveviewport.longitude)}
-              />
-            </Marker>
-
-
-
-      {currentPlaceId == "Live Geolocation" && (
-      <Popup
-              key={currentPlaceId}
-              latitude={liveviewport.latitude}
-              longitude={liveviewport.longitude}
-              closeButton={true}
-              closeOnClick={false}
-              onClose={() => setCurrentPlaceId(null)}
-              anchor="left"
-            >
-              <div style={
-                {
-                  maxHeight:"70px",
-                  backgroundColor:"black",
-                  color:"white",
-                  paddingLeft:"5px",
-                  paddingTop:"5px"
-                }
-                }>
-                Your Location
-              </div>
-            </Popup>)}
-
-
+              Your Location
+            </div>
+          </Popup>
+        )}
 
         {pins.map((p) => (
           <>
@@ -265,16 +281,16 @@ else{
                       {volunteerButton}
                     </button>
                   </form>
-                  
+
                   <form onSubmit={handleSeeAllVol}>
-                  <button
+                    <button
                       name="volunteer"
                       type="submit"
                       className="submitButton"
                     >
                       See all volunteers
                     </button>
-                    </form>
+                  </form>
                 </div>
               </Popup>
             )}

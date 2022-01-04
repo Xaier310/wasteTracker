@@ -1,10 +1,9 @@
 import react from "react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
-
 export default function About() {
   return (
-    <div>
+    <div style={{ color: "white", padding: "2em" }}>
       <h1>About Us</h1>
       <p>
         All over the globe Waste is generated. Most of it is left unaccounted.

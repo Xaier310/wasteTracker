@@ -1,5 +1,5 @@
 import React from "react";
-// import "./footerr.css";
+import "../footerr.css";
 
 function Footer() {
   const mystyle = {
@@ -11,7 +11,7 @@ function Footer() {
   };
   const year = new Date().getFullYear();
   return (
-    <footer>
+    <footer id="footer">
       <p>Copyright ⓒ {year}</p>
     </footer>
   );

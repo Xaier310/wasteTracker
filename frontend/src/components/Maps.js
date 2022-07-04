@@ -16,9 +16,11 @@ import Login from "./Login";
 import { Redirect } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
 //@ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
-mapboxgl.workerClass =require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+mapboxgl.workerClass = MapboxWorker;
 function Maps(props) {
   const myStorage = window.localStorage;
 
@@ -46,7 +48,9 @@ function Maps(props) {
   const handleMarkerClick = async (id, lat, long) => {
     setCurrentPlaceId(id);
     console.log("handle clicked");
-    let res = await axios.get("http://localhost:4000/api/volunteer");
+    let res = await axios.get(
+      "https://reactwastetracker.herokuapp.com/api/volunteer"
+    );
     let allVolunteers = res.data;
 
     let volunteerOrNot = false;
@@ -90,7 +94,10 @@ function Maps(props) {
     };
 
     try {
-      const res = await axios.post("http://localhost:4000/api/pins", newPin);
+      const res = await axios.post(
+        "https://reactwastetracker.herokuapp.com/api/pins",
+        newPin
+      );
       setPins([...pins, res.data]);
       setNewPlace(null);
     } catch (err) {
@@ -115,7 +122,7 @@ function Maps(props) {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/volunteer",
+        "https://reactwastetracker.herokuapp.com/api/volunteer",
         newVol
       );
       console.log(res.data);
@@ -131,7 +138,9 @@ function Maps(props) {
   useEffect(() => {
     const getPins = async () => {
       try {
-        const allPins = await axios.get("http://localhost:4000/api/pins");
+        const allPins = await axios.get(
+          "https://reactwastetracker.herokuapp.com/api/pins"
+        );
         setPins(allPins.data);
       } catch (err) {
         console.log(err);
@@ -144,7 +153,9 @@ function Maps(props) {
     const userDetails = {
       username: myStorage.getItem("user"),
     };
-    await axios.post("http://localhost:4000/api/users/logout");
+    await axios.post(
+      "https://reactwastetracker.herokuapp.com/api/users/logout"
+    );
     setCurrentUsername(null);
     myStorage.removeItem("user");
   };

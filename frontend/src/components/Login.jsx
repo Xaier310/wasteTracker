@@ -15,7 +15,10 @@ export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
       password: passwordRef.current.value,
     };
     try {
-      const res = await axios.post("http://localhost:4000/api/users/login", user);
+      const res = await axios.post(
+        "https://reactwastetracker.herokuapp.com/api/users/login",
+        user
+      );
       setCurrentUsername(res.data.username);
       myStorage.setItem("user", res.data.username);
       setShowLogin(false);

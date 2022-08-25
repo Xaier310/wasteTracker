@@ -45,13 +45,17 @@ function Maps(props) {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
+  const url = "http://localhost:8000/";
+  // const url = "https://reactwastetracker.herokuapp.com/";
+
   const handleMarkerClick = async (id, lat, long) => {
     setCurrentPlaceId(id);
     console.log("handle clicked");
     let res = await axios.get(
-      "https://reactwastetracker.herokuapp.com/api/volunteer"
+      url+"api/volunteer"
     );
     let allVolunteers = res.data;
+
 
     let volunteerOrNot = false;
     console.log("pinId : ", id);
@@ -95,7 +99,7 @@ function Maps(props) {
 
     try {
       const res = await axios.post(
-        "https://reactwastetracker.herokuapp.com/api/pins",
+        url+"api/pins",
         newPin
       );
       setPins([...pins, res.data]);
@@ -122,7 +126,7 @@ function Maps(props) {
 
     try {
       const res = await axios.post(
-        "https://reactwastetracker.herokuapp.com/api/volunteer",
+        url+"api/volunteer",
         newVol
       );
       console.log(res.data);
@@ -139,7 +143,7 @@ function Maps(props) {
     const getPins = async () => {
       try {
         const allPins = await axios.get(
-          "https://reactwastetracker.herokuapp.com/api/pins"
+          URL+"api/pins"
         );
         setPins(allPins.data);
       } catch (err) {
@@ -154,7 +158,7 @@ function Maps(props) {
       username: myStorage.getItem("user"),
     };
     await axios.post(
-      "https://reactwastetracker.herokuapp.com/api/users/logout"
+      url + "api/users/logout"
     );
     setCurrentUsername(null);
     myStorage.removeItem("user");
@@ -182,7 +186,7 @@ function Maps(props) {
   }
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100vh", width: "100%", overflow:"hidden"}}>
       <ReactMapGL
         {...viewport}
         mapboxApiAccessToken="pk.eyJ1IjoiYW1pdGJhdHJhMzEiLCJhIjoiY2t2MmQzbnh0MDI5dzJ5bDdvbDExand4MiJ9.vJaVz5di-IFq3uJd_eCC2Q"
@@ -270,9 +274,9 @@ function Maps(props) {
                 <div className="card">
                   <label>Place</label>
                   <h4 className="place">{p.title}</h4>
-                  <label>Review</label>
+                  <label>Description</label>
                   <p className="desc">{p.desc}</p>
-                  <label>Rating</label>
+                  <label>Garbage Level</label>
                   <div className="stars">
                     {Array(p.rating).fill(<Star className="star" />)}
                   </div>
@@ -333,7 +337,7 @@ function Maps(props) {
             >
               <div>
                 <form onSubmit={handleSubmit}>
-                  <label>Title</label>
+                  <label>Details</label>
                   <input
                     placeholder="Enter a title"
                     autoFocus
@@ -344,7 +348,7 @@ function Maps(props) {
                     placeholder="Say us something about this place."
                     onChange={(e) => setDesc(e.target.value)}
                   />
-                  <label>Rating</label>
+                  <label>Garbage Level</label>
                   <select onChange={(e) => setStar(e.target.value)}>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -352,7 +356,7 @@ function Maps(props) {
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </select>
-                  <button type="submit" className="submitButton">
+                  <button type="submit" className="submitButton" >
                     Add Pin
                   </button>
                 </form>
@@ -361,11 +365,13 @@ function Maps(props) {
           </>
         )}
         {currentUsername ? (
-          <button className="button logout" onClick={handleLogout}>
-            Log out
-          </button>
+          <div className="buttons" id="buttonDiv">
+            <button className="button logout" onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
         ) : (
-          <div className="buttons">
+          <div className="buttons" id="buttonDiv">
             <button className="button login" onClick={() => setShowLogin(true)}>
               Log in
             </button>

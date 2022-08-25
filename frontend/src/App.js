@@ -15,6 +15,11 @@ import {
   Redirect,
 } from "react-router-dom";
 
+// Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 import SeeAllVolunteers from "./components/SeeAllVolunteers";
 // const Volunteer = require("..backend/models/Volunteer");
 const Contact = require("../src/components/Contact").default;
@@ -24,12 +29,11 @@ const Home = require("../src/components/home").default;
 const About = require("../src/components/about").default;
 const Navbar = require("../src/components/Navbar").default;
 const Maps = require("../src/components/Maps").default;
-// const Globe = require("./globe/globe").default;
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      <div id="navrouter"><Navbar /></div>
       <Switch>
         <Route exact path="/">
           <Redirect to="/home" />

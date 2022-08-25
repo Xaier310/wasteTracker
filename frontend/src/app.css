@@ -88,8 +88,7 @@ textarea {
   background-color: #808080;
 }
 
-.buttons,
-.logout {
+.buttons {
   position: absolute;
   top: 10px;
   right: 10px;

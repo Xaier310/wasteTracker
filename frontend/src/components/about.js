@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 export default function About() {
   return (
-    <div style={{ color: "white", padding: "2em" }}>
+    <div style={{ color: "white", margin: "4em", width:"50%", marginLeft:"auto", marginRight:"auto"}} id="about">
       <h1>About Us</h1>
       <p>
         All over the globe Waste is generated. Most of it is left unaccounted.

@@ -10,7 +10,7 @@ export default function Contact() {
   return (
     <div>
 
-      <h1>Contact Us</h1>
+      {/* <h1>Contact Us</h1> */}
       <p>
         <JotformEmbed src="https://form.jotformeu.com/212953694531461" />
         {/* https://form.jotformeu.com/123456789?name=John */}

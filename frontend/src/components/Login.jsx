@@ -7,7 +7,8 @@ export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
   const [error, setError] = useState(false);
   const usernameRef = useRef();
   const passwordRef = useRef();
-
+  const url = "http://localhost:8000/";
+  // const url = "https://reactwastetracker.herokuapp.com/";
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = {
@@ -16,7 +17,7 @@ export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
     };
     try {
       const res = await axios.post(
-        "https://reactwastetracker.herokuapp.com/api/users/login",
+        url+"api/users/login",
         user
       );
       setCurrentUsername(res.data.username);

@@ -17,10 +17,12 @@ export default function Register({ setShowRegister }) {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     };
+    const url = "http://localhost:8000/";
+    // const url = "https://reactwastetracker.herokuapp.com/";
 
     try {
       await axios.post(
-        "https://reactwastetracker.herokuapp.com/api/users/register",
+        url+"api/users/register",
         newUser
       );
       setError(false);
